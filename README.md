@@ -1,0 +1,1 @@
+# SIG-Hack_AlgoTrading2024__GroupWork__Py
