@@ -50,7 +50,7 @@ def retrain(df_train):
                     model = sm.OLS(y, X)
                     results = model.fit(vcov = 'HC3')
     
-                    if results.pvalues[f'stock_{j}_window_{window}_offset_{offset}'] < alpha and results.rsquared > rsquared_limit:
+                    if results.pvalues[f'stock_{j}_window_{window}_offset_{offset}'] < alpha:# and results.rsquared > rsquared_limit:
                         current_stock_signals.append((f'stock_{j}_window_{window}_offset_{offset}',\
                                                       results.params[f'stock_{j}_window_{window}_offset_{offset}'],
                                                      results.params['const']))
@@ -89,8 +89,11 @@ def getMyPosition(prcSoFar):
     #Trade based on predictions
     for i in tradedProducts:
         stock_i_signal = predict(df_prices, i)
-        if stock_i_signal > 0.3:
+        #currentPos[i] += stock_i_signal * 10000 / prcSoFar[i, nt - 1]
+        
+        if stock_i_signal > 0.2:
             currentPos[i] += 1000 / prcSoFar[i, nt - 1]
-        elif stock_i_signal < -0.3:
+        elif stock_i_signal < -0.2:
             currentPos[i] -= 1000 / prcSoFar[i, nt - 1]
+        
     return currentPos
