@@ -20,7 +20,7 @@ TRAIN_LENGTH = 250
 TEST_LENGTH = 250
 
 
-features = ['lag1', 'lag2', 'lag3', 'ma10']
+features = ['lag1', 'lag2', 'ma10']
 TREND = False
 
 old_model_dict = None
