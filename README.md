@@ -1,4 +1,4 @@
-## Algothon 2024
+## SIG algothon 2024
 - Team: Guizhou Moutai 
   - Lang (Ron) Chen
   - Zetian (Jacky) Lyu
