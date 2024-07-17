@@ -1,3 +1,63 @@
+## Algothon 2024
+- Team: Guizhou Moutai 
+  - Lang (Ron) Chen
+  - Zetian (Jacky) Lyu
+  - Alex (Yinhan) Huang
+
+**Algorithm Purpose:** Automatically trade stocks by calling the function getMyPosition everyday with historical and current stock prices, the algotithm will then return the desired position for each stock. 
+
+`requirements.txt` outlines all needed Python packages for this repository to run. 
+
+To run the algorithm, run the file `eval.py` in terminal, which will output the value and return of each day, as well as the average earning per day and its standard deviation. 
+
+## Hackathon Algorithm
+
+1. Base Algorithm: Cross-sectional momentum
+
+- *Acts independently for each stock*
+
+- 1.1 Opening Position
+
+  - 1.1.1 Model
+  
+    - build linear regressions $model_{i, j}$ for predicting tomorrow's **RETURN** based on own **close_to_close (t-5)(t0)** and that feature of one other stock (including market which is the mean of returns of all stocks). For $model_{i, i}$ (where the 'other stock' is itself), only use close_to_close (t-5)(t0) as feature.
+    - fit models based on previous **250** days data
+    - for each stock, only keep models where one or more the non-constant features are significant (**abs(TStat) > 0**)
+    - for each day and each stock, get sum of the sign of predictions of each model. If sum is positive, then initiate a long signal; otherwise initiate a short signal; otherwise don't act.
+
+  - 1.1.2 Changing positions
+
+    - uses an exponential function where opening positions (increasing position in any direction) will have bigger changes when abs position sizes (dollar value) are small, and gradually declines as positions gets bigger; when closing positions, the larger the original position size (dollar value) is, the larger the change.
+    - change in position sizes ranges from $500 to $2000
+    - this mechanism is shared between opening position and stop loss
+
+- 1.2 Model Suspension
+
+    - if sign change in past n (hyperparameter) days return greater than threshold, then ignore model signals for m (hyperparameter) days
+
+- 1.3 Stop Loss
+
+    - if **future 5 day return** forecast is opposite to our current position sign, initiate a signal for changing position which is opposite sign to the current position
+    - the change in position due to stop loss will be a factor (hyperparameter) of the typical change in position according to the exponential function.
+    - if activate stop loss for a day, ignore all model signals generated from `1.1`
+
+
+2. Specific Strategy: Trend 
+- check confidence interval of each stocks' RETURN in previous 250 days AND entirety of history.
+- if confidence interval does not contain 0 (i.e. returns significantly different to 0), then short the stock to maximum position ($10000) each day
+  - bears only by observation of market
+
+
+**Key Learnings**
+
+1. Don't overfit, look at market fundementals and only adjust model mechanism based on hypothesis
+
+2. MA had same modelling results as close-to-close
+
+3. for this competition: 
+
+
+
 # Brief
 
 Make the best trading algorithm!
